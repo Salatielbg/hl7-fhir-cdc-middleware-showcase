@@ -21,16 +21,16 @@ O middleware foi projetado sob o paradigma da **Design Science Research (DSR)** 
 
 ```mermaid
 flowchart LR
-    PG[(PostgreSQL 15\nwal_level=logical)] -->|WAL / pgoutput\nZero Locks| DEB[Debezium Server 2.4\nCDC Connector]
-    DEB -->|Eventos 1:1| RMQ[[RabbitMQ 3\nTopic Exchanges + DLQ]]
-    RMQ --> PAT[patient-fhir-service\nHexagonal · Porta 8081]
-    RMQ --> OBS[observation-fhir-service\nLOINC · Porta 8082]
-    PAT -->|Enriquecimento Pontual O&#40;1&#41;| CAF[(Caffeine Cache v3.1\n& tb_enrichment_rules)]
-    PAT -->|Bundle Patient + Coverage| BUS[[fhir.protocolo.gerado\nFan-Out]]
-    OBS -->|Observation R4| BUS
-    BUS --> WRK[protocol-worker-service\nACL + UPSERT · Porta 8085]
-    WRK --> DW[(Banco Analítico\nRAW.TB_*)]
-    GW[gateway-service\nSpring Cloud Gateway · 8080] --> PAT
+    PG[("PostgreSQL 15<br/>wal_level=logical")] -->|"WAL / pgoutput<br/>Zero Locks"| DEB["Debezium Server 2.4<br/>CDC Connector"]
+    DEB -->|"Eventos 1:1"| RMQ[["RabbitMQ 3<br/>Topic Exchanges + DLQ"]]
+    RMQ --> PAT["patient-fhir-service<br/>Hexagonal · Porta 8081"]
+    RMQ --> OBS["observation-fhir-service<br/>LOINC · Porta 8082"]
+    PAT -->|"Enriquecimento Pontual"| CAF[("Caffeine Cache v3.1<br/>tb_enrichment_rules")]
+    PAT -->|"Bundle Patient + Coverage"| BUS[["fhir.protocolo.gerado<br/>Fan-Out"]]
+    OBS -->|"Observation R4"| BUS
+    BUS --> WRK["protocol-worker-service<br/>ACL + UPSERT · Porta 8085"]
+    WRK --> DW[("Banco Analítico<br/>RAW.TB_*")]
+    GW["gateway-service<br/>Spring Cloud Gateway · 8080"] --> PAT
 ```
 
 ### Destaques de Engenharia
